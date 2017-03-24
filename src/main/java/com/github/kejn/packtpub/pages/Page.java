@@ -1,4 +1,4 @@
-package com.github.kejn.packtpub;
+package com.github.kejn.packtpub.pages;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,11 +22,11 @@ import java.util.List;
  *
  * @author kejn
  */
+@SuppressWarnings("ALL")
 public class Page {
     private static final Logger LOGGER = LoggerFactory.getLogger(Page.class);
 
     private static final String INITIAL_URL = "https://www.packtpub.com";
-    private static final int WAIT_BETWEEN_REQUESTS = 5000;
 
     private WebDriver driver;
     private JavascriptExecutor jsExecutor;
@@ -55,13 +55,12 @@ public class Page {
      * @param username the username/email
      * @param password the password
      * @return this Page instance
-     * @throws IOException if I/O error occurs during file reading
      */
     public Page login(String username, String password) throws IOException {
         String jQuery = readJQueryFrom("/scripts/login.js")
                 .replace("{{username}}", username)
                 .replace("{{password}}", password);
-        executeJs(jQuery, new By.ById("account-bar-logged-in"));
+        executeJs(jQuery);
 
         LOGGER.info("Logged in as '" + username + "'");
 
@@ -71,16 +70,17 @@ public class Page {
 
     /**
      * Navigates to page where user can claim their free book.
+     *
      * @return this Page instance
      */
     public Page navigateToFreeBook() {
-        WebElement div = driver.findElement(new By.ByClassName("hero-blocks"));//> div.hero-block-body > h3
+        WebElement div = driver.findElement(new By.ByClassName("hero-blocks"));
         List<WebElement> links = div.findElements(new By.ByTagName("a"));
         for (WebElement a : links) {
             String text = StringUtils.defaultString(a.getAttribute("href"));
             if (StringUtils.containsIgnoreCase(text, "free-learning")) {
+                LOGGER.info("Navigating to free book");
                 driver.navigate().to(text);
-                waitForAWhile();
                 return this;
             }
         }
@@ -89,10 +89,12 @@ public class Page {
 
     /**
      * Claims currently available free book.
+     *
      * @return this Page instance
+     * @throws IOException if I/O error occurs during script file reading
      */
-    public Page claimYourFreeBook() {
-        String jQuery = wrapJQuery("$('input.form-submit').click();");
+    public Page claimYourFreeBook() throws IOException {
+        String jQuery = readJQueryFrom("/scripts/claimFreeBook.js");
         executeJs(jQuery, new By.ById("account-right-content"));
 
         LOGGER.info("Book claimed");
@@ -101,10 +103,11 @@ public class Page {
     }
 
 
+    @SuppressWarnings("UnusedReturnValue")
     public Page logout() {
-        String jQuery = wrapJQuery("$('#account-bar-logged-in a:nth-child(3) div:nth-child(1)').click()");
-        getWait().until(ExpectedConditions.visibilityOfElementLocated(new By.ByCssSelector("#account-bar-logged-in a:nth-child(3) div:nth-child(1)")));
-        executeJs(jQuery, null);
+        String selector = "#account-bar-logged-in a:nth-child(3) div:nth-child(1)";
+        String jQuery = wrapJQuery("$('" + selector + "').click()");
+        executeJs(jQuery);
 
         LOGGER.info("Logged out");
 
@@ -116,24 +119,19 @@ public class Page {
         return FileUtils.readFileToString(new File(url.getPath()), Charset.defaultCharset());
     }
 
+    private void executeJs(String jQuery) {
+        executeJs(jQuery,null);
+    }
+
     private void executeJs(String jQuery, By waitUntilVisibleElementLocatedBy) {
         jsExecutor.executeScript(jQuery);
         if (waitUntilVisibleElementLocatedBy != null) {
             getWait().until(ExpectedConditions.visibilityOfElementLocated(waitUntilVisibleElementLocatedBy));
         }
-        waitForAWhile();
     }
 
     private WebDriverWait getWait() {
         return new WebDriverWait(driver, 60);
-    }
-
-    private void waitForAWhile() {
-        try {
-            Thread.sleep(WAIT_BETWEEN_REQUESTS);
-        } catch (InterruptedException e) {
-            LOGGER.error("Could not sleep", e);
-        }
     }
 
     private String wrapJQuery(String code) {

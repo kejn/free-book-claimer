@@ -1,5 +1,6 @@
 package com.github.kejn.packtpub;
 
+import com.github.kejn.packtpub.pages.Page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.slf4j.Logger;
@@ -14,28 +15,13 @@ import java.util.stream.Collectors;
  *
  * @author kejn
  */
-public class PacktFreeBookClaimer {
-    /**
-     * {@value #EXIT_STATUS_DRIVER_NOT_PROVIDED}
-     */
-    public static final int EXIT_STATUS_DRIVER_NOT_PROVIDED = 1;
-
-    /**
-     * {@value #EXIT_STATUS_DRIVER_INITIALIZATION_ERROR}
-     */
-    public static final int EXIT_STATUS_DRIVER_INITIALIZATION_ERROR = 2;
-
-    /**
-     * {@value #EXIT_STATUS_ERROR_READING_INTERNAL_SCRIPT}
-     */
-    public static final int EXIT_STATUS_ERROR_READING_INTERNAL_SCRIPT = 3;
-
-    /**
-     * {@value #EXIT_STATUS_UNKNOWN_ERROR}
-     */
-    public static final int EXIT_STATUS_UNKNOWN_ERROR = -1;
-
+class PacktFreeBookClaimer {
     private static final Logger LOGGER = LoggerFactory.getLogger(PacktFreeBookClaimer.class);
+
+    private static final int EXIT_STATUS_DRIVER_NOT_PROVIDED = 1;
+    private static final int EXIT_STATUS_DRIVER_INITIALIZATION_ERROR = 2;
+    private static final int EXIT_STATUS_ERROR_READING_INTERNAL_SCRIPT = 3;
+    private static final int EXIT_STATUS_UNKNOWN_ERROR = -1;
 
     public static void main(String[] args) {
         if (args.length < 2) {
@@ -64,7 +50,7 @@ public class PacktFreeBookClaimer {
         int exitStatus = EXIT_STATUS_UNKNOWN_ERROR;
 
         if (ex instanceof IllegalStateException) {
-            String supportedDrivers = Arrays.asList(SupportedDriver.values()).stream()
+            String supportedDrivers = Arrays.stream(SupportedDriver.values())
                     .map(SupportedDriver::toString)
                     .collect(Collectors.joining("\n"));
             errorMessage = "Supported drivers:\n" + supportedDrivers;

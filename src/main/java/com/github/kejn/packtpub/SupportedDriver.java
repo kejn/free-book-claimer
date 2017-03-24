@@ -19,8 +19,8 @@ enum SupportedDriver {
     INTERNET_EXPLORER("webdriver.ie.driver", InternetExplorerDriver.class),
     EDGE("webdriver.edge.driver", EdgeDriver.class);
 
-    private String propertyKey;
-    private Class<? extends WebDriver> driverClass;
+    private final String propertyKey;
+    private final Class<? extends WebDriver> driverClass;
 
     SupportedDriver(String propertyKey, Class<? extends WebDriver> driverClass) {
         this.propertyKey = propertyKey;
