@@ -22,7 +22,6 @@ import java.util.List;
  *
  * @author kejn
  */
-@SuppressWarnings("ALL")
 public class Page {
     private static final Logger LOGGER = LoggerFactory.getLogger(Page.class);
 
