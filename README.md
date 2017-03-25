@@ -19,7 +19,7 @@ Currently supported browsers are:
 For example, if you want to use Firefox, add environment variable with key `webdriver.gecko.driver` and value containing `path\to\your\gecko\driver.exe`. Alternatively, you can provide this variable during **free-book-claimer** execution as java VM variable `-Dwebdriver.gecko.driver=path\to\your\gecko\driver.exe`.
 
 ### Provide email and password as command-line arguments
-Once you imported project, in your run configuration provide `email` and `password` (**in that order!**) as command-line arguments. They will be used to log in using your account at [Pubpackt.com](https://www.pubpackt.com/).
+Once you imported project, in your run configuration provide `email` and `password` (**in that order!**) as command-line arguments. They will be used to log in using your account at [PacktPub.com](https://www.packtpub.com/).
 
 ### See it in action
 Run the app and claim your free book with no effort!
