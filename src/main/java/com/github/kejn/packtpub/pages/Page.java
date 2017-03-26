@@ -1,6 +1,6 @@
 package com.github.kejn.packtpub.pages;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,9 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -55,8 +54,8 @@ public class Page {
      * @param password the password
      * @return this Page instance
      */
-    public Page login(String username, String password) throws IOException {
-        String jQuery = readJQueryFrom("/scripts/login.js")
+    public Page login(String username, String password) throws IOException, URISyntaxException {
+        String jQuery = readJQueryFrom("scripts/login.js")
                 .replace("{{username}}", username)
                 .replace("{{password}}", password);
         executeJs(jQuery);
@@ -92,8 +91,8 @@ public class Page {
      * @return this Page instance
      * @throws IOException if I/O error occurs during script file reading
      */
-    public Page claimYourFreeBook() throws IOException {
-        String jQuery = readJQueryFrom("/scripts/claimFreeBook.js");
+    public Page claimYourFreeBook() throws IOException, URISyntaxException {
+        String jQuery = readJQueryFrom("scripts/claimFreeBook.js");
         executeJs(jQuery, new By.ById("account-right-content"));
 
         LOGGER.info("Book claimed");
@@ -114,12 +113,11 @@ public class Page {
     }
 
     private String readJQueryFrom(String path) throws IOException {
-        URL url = getClass().getResource(path);
-        return FileUtils.readFileToString(new File(url.getPath()), Charset.defaultCharset());
+        return IOUtils.toString(getClass().getClassLoader().getResourceAsStream(path), Charset.defaultCharset());
     }
 
     private void executeJs(String jQuery) {
-        executeJs(jQuery,null);
+        executeJs(jQuery, null);
     }
 
     private void executeJs(String jQuery, By waitUntilVisibleElementLocatedBy) {
