@@ -58,7 +58,7 @@ public class Page {
         String jQuery = readJQueryFrom("scripts/login.js")
                 .replace("{{username}}", username)
                 .replace("{{password}}", password);
-        executeJs(jQuery);
+        executeJs(jQuery, new By.ById("account-bar-logged-in"));
 
         LOGGER.info("Logged in as '" + username + "'");
 
