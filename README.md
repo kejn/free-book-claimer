@@ -1,6 +1,9 @@
 # free-book-claimer
 Selenium project allowing to automatically claim current free e-book at [PacktPub.com](https://www.packtpub.com/) using provided credentials.
 
+### :no_entry_sign: Not working anymore
+ReCAPTCHA was introduced in the claiming process.
+
 ## :notebook: How to use
 
 ### Download a web driver
