@@ -2,7 +2,11 @@
 Selenium project allowing to automatically claim current free e-book at [PacktPub.com](https://www.packtpub.com/) using provided credentials.
 
 ### :no_entry_sign: Not working anymore
-ReCAPTCHA was introduced in the claiming process.
+ReCAPTCHA was introduced in the claiming process. Consider using the combination of my 2 userscripts (Grasemonkey/Tampermonkey) instead:
+* [Packtpub Navigate To Free Book](https://github.com/kejn/user-scripts/blob/master/Packtpub_Navigate_To_Free_Book.user.js)
+* [Packtpub Claim Free Book](https://github.com/kejn/user-scripts/blob/master/Packtpub_Claim_Free_Book.user.js)
+
+**Note:** Log into your [PacktPub.com](https://www.packtpub.com/) account and let browser remember you, before you activate above scripts.
 
 ## :notebook: How to use
 
